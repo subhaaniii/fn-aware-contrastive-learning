@@ -1,0 +1,11 @@
+{
+  "mode": "noisy",
+  "n_samples": 1000,
+  "n_clusters": 20,
+  "latent_dim": 32,
+  "feature_dim": 64,
+  "noise_rate": 0.25,
+  "cluster_spread": 0.3,
+  "seed": 42,
+  "description": "Controlled synthetic paired data for studying standard InfoNCE versus false-negative-aware InfoNCE."
+}
