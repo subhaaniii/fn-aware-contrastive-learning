@@ -119,8 +119,8 @@ The main lesson is that loss design, cluster structure, positive-pair quality, a
 
 ## Limitations
 
-This repository is a controlled method-analysis project. It uses synthetic paired features and semantic cluster labels so that false-negative structure can be explicitly studied.
+The benchmark uses synthetic paired features, so the false-negative structure and pair corruption rate are controlled by design. This makes the experiment useful for studying loss behavior, but it does not capture the full complexity of real multimodal datasets.
 
-The results should be interpreted as evidence of loss-function behavior and retrieval-evaluation reasoning, not as a claim of performance on real clinical data or production retrieval systems.
+The results should not be interpreted as clinical or production-level retrieval performance. They show how standard InfoNCE and FN-aware InfoNCE behave under controlled clean, clustered, and noisy-pair conditions.
 
-A stronger follow-up would include repeated random seeds, additional alpha values, harder cluster overlap settings, and evaluation on authorized real-world paired datasets.
+A stronger follow-up would include repeated seeds, additional alpha values, harder cluster-overlap settings, larger candidate pools, and evaluation on authorized real-world paired datasets.

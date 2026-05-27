@@ -1,85 +1,189 @@
 # False-Negative-Aware Contrastive Learning
 
-A controlled method-study comparing standard InfoNCE with false-negative-aware InfoNCE for multimodal retrieval.
+A controlled experiment on how false negatives affect contrastive retrieval.
 
-The project studies a common issue in contrastive learning: not every non-matching sample is truly negative. In datasets with semantic overlap, two samples may not be exact pairs but may still belong to the same semantic group. Treating those samples as hard negatives can create false-negative pressure.
+This repository compares **standard InfoNCE** with a **false-negative-aware InfoNCE variant** using synthetic paired data with known semantic cluster structure. The goal is to study loss-function behavior under clean, clustered, and noisy-pair conditions.
 
-## Research Question
+---
 
-Can false-negative-aware contrastive learning improve retrieval when semantically similar samples are incorrectly treated as negatives?
+## Problem
 
-## What This Repository Shows
+Contrastive learning usually assumes that every non-matching sample in a batch is a negative.
 
-This repository demonstrates:
+That assumption is not always safe.
 
-- how standard InfoNCE behaves under clean, clustered, and noisy-pair settings
-- how false-negative-aware InfoNCE changes retrieval behavior
-- how semantic cluster labels can be used to downweight likely false negatives
-- how retrieval metrics change when sample size increases from 5000 to 20000
-- why loss design cannot fully compensate for corrupted positive pairs
+In real multimodal datasets, two samples may not be exact pairs, but they can still be semantically similar. If contrastive learning pushes those samples apart too strongly, the model may learn a representation that is overly strict or semantically distorted.
 
-## Methods Compared
+This repository studies that problem in a controlled setup.
 
-| Method | Description |
+---
+
+## Core Question
+
+**Can false-negative-aware InfoNCE improve retrieval when semantically similar samples are incorrectly treated as negatives?**
+
+The project tests this question by controlling:
+
+- semantic cluster overlap
+- corrupted positive pairings
+- sample size
+- false-negative downweighting strength
+
+---
+
+## Hypothesis
+
+False-negative-aware contrastive learning should help most when the dataset contains many semantically similar non-paired samples.
+
+However, the benefit may disappear when:
+
+- the data is already clean
+- positive pairs are corrupted
+- same-cluster negatives are downweighted too strongly
+- standard InfoNCE is already sufficient
+
+---
+
+## Methods
+
+### Standard InfoNCE
+
+Standard InfoNCE pulls matched pairs together and pushes all other batch samples apart.
+
+In this setup, every non-matching sample is treated as a negative.
+
+### False-Negative-Aware InfoNCE
+
+The false-negative-aware variant uses synthetic semantic cluster labels.
+
+If two samples are not exact pairs but belong to the same cluster, their negative contribution is reduced.
+
+Two downweighting strengths are tested:
+
+| Loss | Meaning |
 |---|---|
-| Standard InfoNCE | Treats all non-matching samples in a batch as negatives |
-| FN-aware InfoNCE | Downweights non-matching samples that share the same semantic cluster |
 | FN-aware alpha 0.5 | Moderate downweighting of same-cluster negatives |
 | FN-aware alpha 0.25 | Stronger downweighting of same-cluster negatives |
 
-## Dataset Setup
+---
 
-This repository uses controlled synthetic paired data with two modalities:
+## Related Work
 
-- Modality A: synthetic feature vector
-- Modality B: paired synthetic feature vector
-- Cluster label: synthetic semantic group
+This repository is inspired by contrastive representation learning and work on false negatives in contrastive objectives.
 
-Three dataset modes are included:
+The baseline loss is based on **InfoNCE**, popularized in *Representation Learning with Contrastive Predictive Coding* by van den Oord et al. InfoNCE learns representations by pulling positive pairs together while pushing sampled negatives apart.
+
+However, randomly sampled negatives can include semantically similar examples. This creates false-negative pressure.
+
+**Debiased Contrastive Learning** by Chuang et al. studies this negative-sampling bias and proposes a debiased objective for cases where same-label or semantically similar samples may be sampled as negatives.
+
+**False Negative Cancellation** by Huynh et al. directly studies how false negatives can harm contrastive self-supervised learning and proposes ways to reduce their effect.
+
+**Supervised Contrastive Learning** by Khosla et al. is also relevant because it treats same-class samples as positives rather than negatives, which connects to the semantic-cluster setup used here.
+
+This repository does not reproduce those papers directly. Instead, it builds a controlled benchmark to compare standard InfoNCE with a simple false-negative-aware variant.
+
+### Why these references?
+
+- **CPC / InfoNCE** provides the foundation for the contrastive objective used in this repository.
+- **Debiased Contrastive Learning** is directly related to negative-sampling bias and false negatives.
+- **False Negative Cancellation** focuses on identifying and reducing harmful false negatives.
+- **Supervised Contrastive Learning** provides useful background for treating same-class or same-cluster samples differently from ordinary negatives.
+
+---
+
+## Synthetic Benchmark Design
+
+The dataset contains paired synthetic feature vectors:
+
+| Component | Description |
+|---|---|
+| Modality A | Synthetic feature vector |
+| Modality B | Paired synthetic feature vector |
+| Cluster label | Known semantic group |
+| Pair label | Matching pair identity |
+
+Three dataset modes are tested:
 
 | Mode | Purpose |
 |---|---|
-| Clean | Tests behavior when pairings are correct and false-negative pressure is low |
-| Clustered | Tests behavior when many samples are semantically similar, increasing false-negative risk |
-| Noisy | Tests behavior when some positive pair assignments are intentionally corrupted |
+| Clean | Correct pairs with low false-negative pressure |
+| Clustered | Many semantically similar samples, increasing false-negative risk |
+| Noisy | Some positive pair assignments are intentionally corrupted |
 
-The benchmark uses synthetic paired features so that false-negative structure, cluster overlap, pair corruption, and sample size can be explicitly controlled.
+The benchmark uses synthetic paired features so that the false-negative structure, cluster overlap, pair corruption, and sample size can be explicitly controlled.
 
-## Experiments
+---
 
-The final benchmark compares:
+## Experiment Matrix
 
-- loss function: standard InfoNCE vs FN-aware InfoNCE
-- FN-aware alpha: 0.5 and 0.25
-- dataset mode: clean, clustered, noisy
-- sample size: 5000 and 20000
-- training duration: 50 epochs
+| Variable | Values |
+|---|---|
+| Loss function | Standard InfoNCE, FN-aware InfoNCE |
+| Alpha | 0.5, 0.25 |
+| Dataset mode | Clean, clustered, noisy |
+| Sample size | 5000, 20000 |
+| Epochs | 50 |
 
-Metrics reported:
+Total benchmark runs:
 
-- Recall@1
-- Recall@5
-- Recall@10
-- Recall@50
-- lift over random retrieval
-- positive-pair cosine similarity
-- same-cluster negative similarity
-- different-cluster negative similarity
-- training loss
+```text
+3 dataset modes × 2 sample sizes × 3 loss settings = 18 runs
+```
 
-## Key Findings
+---
 
-False-negative-aware InfoNCE did not universally outperform standard InfoNCE. Its effect depended on the dataset condition.
+## Metrics
 
-Main observations:
+The experiments report:
 
-- In clean data, standard InfoNCE already performed almost perfectly.
-- In clustered data, FN-aware loss improved some top-rank retrieval metrics, especially in the 5000-sample setup.
-- In noisy data, all methods degraded because some positive pairs were intentionally corrupted.
-- FN-aware loss can reduce false-negative pressure, but it cannot fully repair wrong positive supervision.
-- Stronger downweighting was not always better, showing that alpha needs tuning.
+| Metric | Meaning |
+|---|---|
+| Recall@1 | Correct match is ranked first |
+| Recall@5 | Correct match appears in top 5 |
+| Recall@10 | Correct match appears in top 10 |
+| Recall@50 | Correct match appears in top 50 |
+| Lift@K | Improvement over random retrieval |
+| Positive similarity | Average similarity of true pairs |
+| Same-cluster negative similarity | Similarity between semantically similar non-pairs |
+| Different-cluster negative similarity | Similarity between different-cluster non-pairs |
+| Training loss | Optimization objective value |
 
-The main lesson is that loss design, semantic overlap, positive-pair quality, and sample size interact strongly.
+---
+
+## Main Findings
+
+The results show that false-negative-aware InfoNCE is **not universally better** than standard InfoNCE.
+
+Instead, its usefulness depends on the data condition.
+
+### Clean data
+
+Standard InfoNCE already performs almost perfectly. FN-aware loss does not improve retrieval because there is little false-negative pressure to fix.
+
+### Clustered data
+
+FN-aware loss improves some top-rank retrieval metrics in the 5000-sample clustered setup. This supports the idea that downweighting same-cluster negatives can help when semantically similar samples are incorrectly treated as hard negatives.
+
+At 20000 samples, the results are mixed. Standard InfoNCE remains strong, while FN-aware loss improves some mid/top-k metrics depending on alpha.
+
+### Noisy data
+
+When positive pairs are corrupted, all losses degrade.
+
+FN-aware loss slightly improves some retrieval metrics, but it cannot fully repair wrong positive supervision.
+
+---
+
+## Key Takeaway
+
+False-negative-aware contrastive learning can help when semantic overlap creates harmful negatives, but it is not a universal replacement for standard InfoNCE.
+
+The main lesson is:
+
+> Loss design, semantic cluster structure, positive-pair quality, alpha strength, and sample size must be evaluated together.
+
+---
 
 ## Repository Structure
 
@@ -113,6 +217,8 @@ fn-aware-contrastive-learning/
 └── README.md
 ```
 
+---
+
 ## Quick Start
 
 Install dependencies:
@@ -139,11 +245,20 @@ Train false-negative-aware InfoNCE:
 python src/train.py --loss fn_aware --alpha 0.5 --epochs 50 --batch-size 512 --output-dir outputs/clustered_fn_aware --checkpoint-dir checkpoints/clustered_fn_aware
 ```
 
-Collect results:
+Collect final metrics:
 
 ```powershell
 python src/collect_results.py
 ```
+
+---
+
+## Results
+
+- [Full controlled experiment summary](experiments/results_summary.md)
+- [Result table](experiments/results_table.csv)
+
+---
 
 ## Documentation
 
@@ -152,12 +267,22 @@ python src/collect_results.py
 - [Loss explanation](docs/loss_explanation.md)
 - [Metric explanation](docs/metric_explanation.md)
 - [Reproducibility notes](docs/reproducibility_notes.md)
-- [Controlled experiment results](experiments/results_summary.md)
+
+---
+
+## References
+
+- Aaron van den Oord, Yazhe Li, and Oriol Vinyals. *Representation Learning with Contrastive Predictive Coding*. arXiv, 2018.
+- Ching-Yao Chuang, Joshua Robinson, Yen-Chen Lin, Antonio Torralba, and Stefanie Jegelka. *Debiased Contrastive Learning*. NeurIPS, 2020.
+- Tri Huynh, Simon Kornblith, Matthew R. Walter, Michael Maire, and Maryam Khademi. *Boosting Contrastive Self-Supervised Learning with False Negative Cancellation*. WACV, 2022.
+- Prannay Khosla, Piotr Teterwak, Chen Wang, Aaron Sarna, Yonglong Tian, Phillip Isola, Aaron Maschinot, Ce Liu, and Dilip Krishnan. *Supervised Contrastive Learning*. NeurIPS, 2020.
+
+---
 
 ## Limitations
 
-This repository is a controlled method-analysis project. It uses synthetic paired features and semantic cluster labels so that false-negative structure can be explicitly studied.
+This repository is a controlled loss-function study using synthetic paired features and semantic cluster labels. The setup is designed to isolate the false-negative problem in contrastive learning under known conditions.
 
-The results should be interpreted as evidence of loss-function behavior and retrieval-evaluation reasoning, not as a claim of performance on real clinical data or production retrieval systems.
+The results should be read as method-behavior analysis, not as evidence of performance on real clinical data or production retrieval systems.
 
-A stronger follow-up would include repeated random seeds, additional alpha values, harder cluster-overlap settings, and evaluation on authorized real-world paired datasets.
+Future work could extend this benchmark with repeated random seeds, additional alpha values, harder cluster-overlap settings, and evaluation on authorized real-world paired datasets.
