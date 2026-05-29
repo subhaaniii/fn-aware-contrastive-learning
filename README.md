@@ -260,6 +260,47 @@ python src/collect_results.py
 
 ---
 
+## False-Negative Visualization
+
+The plots below summarize the synthetic feature space and the main false-negative-aware comparison.
+
+<table>
+  <tr>
+    <th>Input feature space</th>
+    <th>Recall comparison</th>
+    <th>Similarity diagnostic</th>
+  </tr>
+  <tr>
+    <td width="33%">
+      <a href="figures/fn_aware_input_feature_space.png">
+        <img src="figures/fn_aware_input_feature_space.png" alt="Input feature space" width="100%">
+      </a>
+    </td>
+    <td width="33%">
+      <a href="figures/fn_aware_recall_comparison.png">
+        <img src="figures/fn_aware_recall_comparison.png" alt="Recall comparison" width="100%">
+      </a>
+    </td>
+    <td width="33%">
+      <a href="figures/fn_aware_similarity_diagnostic.png">
+        <img src="figures/fn_aware_similarity_diagnostic.png" alt="Similarity diagnostic" width="100%">
+      </a>
+    </td>
+  </tr>
+</table>
+
+Each panel links to the full-resolution figure.
+
+| Panel | What to notice |
+|---|---|
+| **Input feature space** | Circles and crosses represent the two paired modalities. Colors indicate synthetic semantic clusters. Same-colored non-paired samples are potential false negatives under standard InfoNCE. |
+| **Recall comparison** | Standard InfoNCE and FN-aware variants are compared across clean, clustered, and noisy settings. This shows whether downweighting same-cluster negatives improves retrieval. |
+| **Similarity diagnostic** | Positive-pair similarity is compared with same-cluster negative similarity and different-cluster negative similarity. This helps show whether the model separates true negatives while avoiding excessive punishment of semantically related samples. |
+
+These figures are qualitative diagnostics. The main conclusions are based on the quantitative retrieval results in `experiments/results_table.csv`.
+
+---
+
 ## Documentation
 
 - [Method overview](docs/method_overview.md)
