@@ -98,29 +98,6 @@ This repository does not reproduce those papers directly. Instead, it builds a c
 
 ---
 
-## Synthetic Benchmark Design
-
-The dataset contains paired synthetic feature vectors:
-
-| Component | Description |
-|---|---|
-| Modality A | Synthetic feature vector |
-| Modality B | Paired synthetic feature vector |
-| Cluster label | Known semantic group |
-| Pair label | Matching pair identity |
-
-Three dataset modes are tested:
-
-| Mode | Purpose |
-|---|---|
-| Clean | Correct pairs with low false-negative pressure |
-| Clustered | Many semantically similar samples, increasing false-negative risk |
-| Noisy | Some positive pair assignments are intentionally corrupted |
-
-The benchmark uses synthetic paired features so that the false-negative structure, cluster overlap, pair corruption, and sample size can be explicitly controlled.
-
----
-
 ## Experiment Matrix
 
 | Variable | Values |
