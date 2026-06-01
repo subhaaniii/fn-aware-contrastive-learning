@@ -210,3 +210,26 @@ The most important lesson is:
 Standard InfoNCE can be very strong, but its assumptions should be tested. False-negative-aware training can help when semantic overlap is meaningful, but it must be evaluated together with data quality, positive-pair reliability, sample size, and embedding behavior.
 
 This changed how I think about retrieval evaluation. A good benchmark should not only ask whether a loss improves Recall@K. It should also ask when it helps, when it fails, and what kind of embedding space it creates.
+
+## 13. Related Work
+
+This project is inspired by contrastive representation learning and work on false negatives in contrastive objectives.
+
+The baseline loss is based on InfoNCE, popularized in *Representation Learning with Contrastive Predictive Coding* by van den Oord et al. InfoNCE learns representations by pulling positive pairs together while pushing sampled negatives apart.
+
+However, randomly sampled negatives can include semantically similar examples. This creates false-negative pressure.
+
+*Debiased Contrastive Learning* by Chuang et al. studies negative-sampling bias and proposes a debiased objective for cases where same-label or semantically similar samples may be sampled as negatives.
+
+*Boosting Contrastive Self-Supervised Learning with False Negative Cancellation* by Huynh et al. directly studies how false negatives can harm contrastive self-supervised learning and proposes ways to reduce their effect.
+
+*Supervised Contrastive Learning* by Khosla et al. is also relevant because it treats same-class samples as positives rather than negatives, which connects to the semantic-cluster setup used here.
+
+This repository does not reproduce those papers directly. Instead, it builds a controlled benchmark to compare standard InfoNCE with a simple false-negative-aware variant.
+
+## 14. References
+
+- Aaron van den Oord, Yazhe Li, and Oriol Vinyals. *Representation Learning with Contrastive Predictive Coding*. arXiv, 2018.
+- Ching-Yao Chuang, Joshua Robinson, Yen-Chen Lin, Antonio Torralba, and Stefanie Jegelka. *Debiased Contrastive Learning*. NeurIPS, 2020.
+- Tri Huynh, Simon Kornblith, Matthew R. Walter, Michael Maire, and Maryam Khademi. *Boosting Contrastive Self-Supervised Learning with False Negative Cancellation*. WACV, 2022.
+- Prannay Khosla, Piotr Teterwak, Chen Wang, Aaron Sarna, Yonglong Tian, Phillip Isola, Aaron Maschinot, Ce Liu, and Dilip Krishnan. *Supervised Contrastive Learning*. NeurIPS, 2020.
