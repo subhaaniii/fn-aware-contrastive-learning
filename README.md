@@ -4,6 +4,12 @@ A controlled experiment on how false negatives affect contrastive retrieval.
 
 This repository compares **standard InfoNCE** with a **false-negative-aware InfoNCE variant** using synthetic paired data with known semantic cluster structure. The goal is to study loss-function behavior under clean, clustered, and noisy-pair conditions.
 
+## Research Report
+
+A paper-style summary of this project is available here:
+
+[Read the paper-style report](docs/paper_style_report.md)
+
 ---
 
 ## Problem
