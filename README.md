@@ -24,19 +24,6 @@ This repository studies that problem in a controlled setup.
 
 ---
 
-## Core Question
-
-**Can false-negative-aware InfoNCE improve retrieval when semantically similar samples are incorrectly treated as negatives?**
-
-The project tests this question by controlling:
-
-- semantic cluster overlap
-- corrupted positive pairings
-- sample size
-- false-negative downweighting strength
-
----
-
 ## Hypothesis
 
 False-negative-aware contrastive learning should help most when the dataset contains many semantically similar non-paired samples.
