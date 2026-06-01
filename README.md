@@ -113,25 +113,6 @@ Total benchmark runs:
 ```text
 3 dataset modes × 2 sample sizes × 3 loss settings = 18 runs
 ```
-
----
-
-## Metrics
-
-The experiments report:
-
-| Metric | Meaning |
-|---|---|
-| Recall@1 | Correct match is ranked first |
-| Recall@5 | Correct match appears in top 5 |
-| Recall@10 | Correct match appears in top 10 |
-| Recall@50 | Correct match appears in top 50 |
-| Lift@K | Improvement over random retrieval |
-| Positive similarity | Average similarity of true pairs |
-| Same-cluster negative similarity | Similarity between semantically similar non-pairs |
-| Different-cluster negative similarity | Similarity between different-cluster non-pairs |
-| Training loss | Optimization objective value |
-
 ---
 
 ## False-Negative Visualization
