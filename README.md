@@ -24,7 +24,7 @@ This repository studies that problem in a controlled setup.
 
 ## Core Question
 
-`Can false-negative-aware contrastive learning improve retrieval when some “negative” samples are actually semantically related to the query?`
+> Can false-negative-aware contrastive learning improve retrieval when some “negative” samples are actually semantically related to the query?
 
 This project studies that question by varying:
 
