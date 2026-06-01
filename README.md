@@ -22,6 +22,17 @@ In real multimodal datasets, two samples may not be exact pairs, but they can st
 
 This repository studies that problem in a controlled setup.
 
+## Core Question
+
+Can false-negative-aware contrastive learning improve retrieval when some “negative” samples are actually semantically related to the query?
+
+This project studies that question by varying:
+
+- semantic cluster overlap
+- noisy positive pair assignments
+- dataset size
+- false-negative downweighting strength
+
 ---
 
 ## Hypothesis
@@ -62,28 +73,17 @@ Two downweighting strengths are tested:
 
 ## Related Work
 
-This repository is inspired by contrastive representation learning and work on false negatives in contrastive objectives.
+This project is inspired by contrastive representation learning, false-negative handling in contrastive objectives, and supervised/debiased contrastive learning.
 
-The baseline loss is based on **InfoNCE**, popularized in *Representation Learning with Contrastive Predictive Coding* by van den Oord et al. InfoNCE learns representations by pulling positive pairs together while pushing sampled negatives apart.
-
-However, randomly sampled negatives can include semantically similar examples. This creates false-negative pressure.
-
-**Debiased Contrastive Learning** by Chuang et al. studies this negative-sampling bias and proposes a debiased objective for cases where same-label or semantically similar samples may be sampled as negatives.
-
-**False Negative Cancellation** by Huynh et al. directly studies how false negatives can harm contrastive self-supervised learning and proposes ways to reduce their effect.
-
-**Supervised Contrastive Learning** by Khosla et al. is also relevant because it treats same-class samples as positives rather than negatives, which connects to the semantic-cluster setup used here.
-
-This repository does not reproduce those papers directly. Instead, it builds a controlled benchmark to compare standard InfoNCE with a simple false-negative-aware variant.
-
-### Why these references?
-
-- **CPC / InfoNCE** provides the foundation for the contrastive objective used in this repository.
-- **Debiased Contrastive Learning** is directly related to negative-sampling bias and false negatives.
-- **False Negative Cancellation** focuses on identifying and reducing harmful false negatives.
-- **Supervised Contrastive Learning** provides useful background for treating same-class or same-cluster samples differently from ordinary negatives.
+For the full related-work discussion and references, see the [paper-style report](docs/paper_style_report.md).
 
 ---
+
+## Metrics
+
+The benchmark evaluates retrieval quality and embedding behavior using Recall@K, Lift@K, positive-pair similarity, same-cluster negative similarity, different-cluster negative similarity, and training loss.
+
+For full metric definitions, see the [paper-style report](docs/paper_style_report.md).
 
 ## Experiment Matrix
 
@@ -264,7 +264,4 @@ python src/collect_results.py
 
 ## References
 
-- Aaron van den Oord, Yazhe Li, and Oriol Vinyals. *Representation Learning with Contrastive Predictive Coding*. arXiv, 2018.
-- Ching-Yao Chuang, Joshua Robinson, Yen-Chen Lin, Antonio Torralba, and Stefanie Jegelka. *Debiased Contrastive Learning*. NeurIPS, 2020.
-- Tri Huynh, Simon Kornblith, Matthew R. Walter, Michael Maire, and Maryam Khademi. *Boosting Contrastive Self-Supervised Learning with False Negative Cancellation*. WACV, 2022.
-- Prannay Khosla, Piotr Teterwak, Chen Wang, Aaron Sarna, Yonglong Tian, Phillip Isola, Aaron Maschinot, Ce Liu, and Dilip Krishnan. *Supervised Contrastive Learning*. NeurIPS, 2020.
+References are included in the [paper-style report](docs/paper_style_report.md).
