@@ -48,37 +48,6 @@ However, the benefit may disappear when:
 
 ---
 
-## Methods
-
-### Standard InfoNCE
-
-Standard InfoNCE pulls matched pairs together and pushes all other batch samples apart.
-
-In this setup, every non-matching sample is treated as a negative.
-
-### False-Negative-Aware InfoNCE
-
-The false-negative-aware variant uses synthetic semantic cluster labels.
-
-If two samples are not exact pairs but belong to the same cluster, their negative contribution is reduced.
-
-Two downweighting strengths are tested:
-
-| Loss | Meaning |
-|---|---|
-| FN-aware alpha 0.5 | Moderate downweighting of same-cluster negatives |
-| FN-aware alpha 0.25 | Stronger downweighting of same-cluster negatives |
-
----
-
-## Related Work
-
-This project is inspired by contrastive representation learning, false-negative handling in contrastive objectives, and supervised/debiased contrastive learning.
-
-For the full related-work discussion and references, see the [paper-style report](docs/paper_style_report.md).
-
----
-
 ## False-Negative Visualization
 
 The plots below summarize the synthetic feature space and the main false-negative-aware comparison.
@@ -117,6 +86,37 @@ Each panel links to the full-resolution figure.
 | **Similarity diagnostic** | Positive-pair similarity is compared with same-cluster negative similarity and different-cluster negative similarity. This helps show whether the model separates true negatives while avoiding excessive punishment of semantically related samples. |
 
 These figures are qualitative diagnostics. The main conclusions are based on the quantitative retrieval results in `experiments/results_table.csv`.
+
+---
+
+## Methods
+
+### Standard InfoNCE
+
+Standard InfoNCE pulls matched pairs together and pushes all other batch samples apart.
+
+In this setup, every non-matching sample is treated as a negative.
+
+### False-Negative-Aware InfoNCE
+
+The false-negative-aware variant uses synthetic semantic cluster labels.
+
+If two samples are not exact pairs but belong to the same cluster, their negative contribution is reduced.
+
+Two downweighting strengths are tested:
+
+| Loss | Meaning |
+|---|---|
+| FN-aware alpha 0.5 | Moderate downweighting of same-cluster negatives |
+| FN-aware alpha 0.25 | Stronger downweighting of same-cluster negatives |
+
+---
+
+## Related Work
+
+This project is inspired by contrastive representation learning, false-negative handling in contrastive objectives, and supervised/debiased contrastive learning.
+
+For the full related-work discussion and references, see the [paper-style report](docs/paper_style_report.md).
 
 ---
 
