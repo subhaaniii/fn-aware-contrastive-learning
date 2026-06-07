@@ -79,29 +79,6 @@ For the full related-work discussion and references, see the [paper-style report
 
 ---
 
-## Metrics
-
-The benchmark evaluates retrieval quality and embedding behavior using Recall@K, Lift@K, positive-pair similarity, same-cluster negative similarity, different-cluster negative similarity, and training loss.
-
-For full metric definitions, see the [paper-style report](docs/paper_style_report.md).
-
-## Experiment Matrix
-
-| Variable | Values |
-|---|---|
-| Loss function | Standard InfoNCE, FN-aware InfoNCE |
-| Alpha | 0.5, 0.25 |
-| Dataset mode | Clean, clustered, noisy |
-| Sample size | 5000, 20000 |
-| Epochs | 50 |
-
-Total benchmark runs:
-
-```text
-3 dataset modes × 2 sample sizes × 3 loss settings = 18 runs
-```
----
-
 ## False-Negative Visualization
 
 The plots below summarize the synthetic feature space and the main false-negative-aware comparison.
@@ -140,6 +117,30 @@ Each panel links to the full-resolution figure.
 | **Similarity diagnostic** | Positive-pair similarity is compared with same-cluster negative similarity and different-cluster negative similarity. This helps show whether the model separates true negatives while avoiding excessive punishment of semantically related samples. |
 
 These figures are qualitative diagnostics. The main conclusions are based on the quantitative retrieval results in `experiments/results_table.csv`.
+
+---
+
+## Metrics
+
+The benchmark evaluates retrieval quality and embedding behavior using Recall@K, Lift@K, positive-pair similarity, same-cluster negative similarity, different-cluster negative similarity, and training loss.
+
+For full metric definitions, see the [paper-style report](docs/paper_style_report.md).
+
+## Experiment Matrix
+
+| Variable | Values |
+|---|---|
+| Loss function | Standard InfoNCE, FN-aware InfoNCE |
+| Alpha | 0.5, 0.25 |
+| Dataset mode | Clean, clustered, noisy |
+| Sample size | 5000, 20000 |
+| Epochs | 50 |
+
+Total benchmark runs:
+
+```text
+3 dataset modes × 2 sample sizes × 3 loss settings = 18 runs
+```
 
 ## Results
 
