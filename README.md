@@ -141,6 +141,11 @@ Each panel links to the full-resolution figure.
 
 These figures are qualitative diagnostics. The main conclusions are based on the quantitative retrieval results in `experiments/results_table.csv`.
 
+## Results
+
+- [Full controlled experiment summary](experiments/results_summary.md)
+- [Result table](experiments/results_table.csv)
+
 ---
 
 ## Main Findings
@@ -242,13 +247,6 @@ Collect final metrics:
 ```powershell
 python src/collect_results.py
 ```
-
----
-
-## Results
-
-- [Full controlled experiment summary](experiments/results_summary.md)
-- [Result table](experiments/results_table.csv)
 
 ---
 
